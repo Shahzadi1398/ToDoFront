@@ -1,0 +1,110 @@
+<div class="container">
+    <div class="container-fluid">
+        <h1>To Do Task Month Wise</h1>
+        <div class="alert alert-success shadow-lg mb-5 w-full" *ngIf="taskAdded">Task has been added</div>
+        <div class="alert alert-success shadow-lg mb-5 w-full" *ngIf="taskDeleted">Task has been deleted</div>
+        <div class="alert alert-success shadow-lg mb-5 w-full" *ngIf="taskComplete">Task has been completed</div>
+        <h6  style="margin-bottom: 10px; font-size: 20px;">Filter data according to these</h6>
+        <div class="filter">           
+            <span>Priority: </span>
+            <mat-chip-list class="filter-chip-list">
+                <mat-chip class="filter-chip"  (click)="filterpriority('High')">High</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filterpriority('Medium')">Medium</mat-chip>
+                <mat-chip class="filter-chip" (click)="filterpriority('Low')">Low</mat-chip>
+            </mat-chip-list>
+            <span style="margin-left: 35px;">Category: </span>
+            <mat-chip-list class="filter-chip-list">
+                <mat-chip class="filter-chip"  (click)="filtercategory('Home')">Home</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filtercategory('Office')">Office</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filtercategory('Personal')">Personal</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filtercategory('Education')">Education</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filtercategory('Finance')">Finance</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filtercategory('Social')">Social</mat-chip>
+            </mat-chip-list>
+            <span style="margin-left: 35px;">Repeat After: </span>
+            <mat-chip-list class="filter-chip-list">
+                <mat-chip class="filter-chip"  (click)="filterrepeat('Daily')">Daily</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filterrepeat('Weekly')">Weekly</mat-chip>
+                <mat-chip class="filter-chip"  (click)="filterrepeat('Monthly')">Monthly</mat-chip>
+            </mat-chip-list>
+        </div>   
+    </div>
+    <div class="todos-filter">
+        <div class="dropdown">
+          <label tabindex="0" class="btn m-1">Filter</label>
+          <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li (click)="filterTodos('all')"><a>All</a></li>
+            <li (click)="filterTodos('pending')"><a>Pending</a></li>
+            <li (click)="filterTodos('completed')"><a>Completed</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-secondary delete-all-btn" (click)="deleteAllTasks()">
+          Delete All
+        </button>
+    </div>
+      <table class="table w-full">    
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Priority Level</th>
+                <th>Category</th>
+                <th>Repeat After</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="todos-list-body">
+            <ng-container *ngIf="filteredTaskList && filteredTaskList.length > 0; else noRecords">
+                <tr *ngFor="let task of filteredTaskList">
+                    <td>{{ task.taskName }}</td>
+                    <td [ngClass]="{
+                    'today': isDueDateToday(task.taskDate),
+                    'past-due': isDueDatePast(task.taskDate)               
+                  }">
+                        {{ task.taskDate | date}}
+                    </td>
+                    <td>
+                        <span *ngIf="!task.isCompleted">Pending</span>
+                        <span *ngIf="task.isCompleted">Completed</span>
+                    </td>
+                    <td>{{ task.priorityLevels }}</td>
+                    <td>{{ task.categories }}</td>
+                    <td>{{ task.repeatAfter }}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" style="margin-right: 10px;" 
+                            (click)="editTask(task.uuidId)" 
+                            [disabled]="isDueDatePast(task.taskDate) && !task.isCompleted">
+                            <i class="bx bx-check bx-xs"></i>
+                        </button>
+                        <button class="btn btn-error btn-sm"  
+                            style="margin-right: 10px;" 
+                            (click)="deleteTask(task.uuidId)" 
+                            [disabled]="isDueDatePast(task.taskDate)">
+                            <i class="bx bx-trash bx-xs"></i>
+                        </button>
+                        <button *ngIf="isDueDatePast(task.taskDate)"
+                            class="btn btn-info btn-sm" 
+                            (click)="addEntry(task)" 
+                            >
+                            <i class="bx bx-plus"></i>
+                        </button>
+                    </td>              
+                </tr>
+            </ng-container>                    
+            <ng-template #noRecords>
+                <tr>
+                    <td colspan="7" style="text-align: center;">No Records</td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </table>
+    
+    
+    
+      
+      <h6 style="color: red;">* Red colour in the above table donate that the date has been pass or coming</h6>
+      <h6 style="color: green;">* Green colour in the above table donate that the date has been coming</h6>
+</div>
+
+<button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" (click)="navigateToTask()">Go to add task</button>

@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="container-fluid">
+        <h1>Todo List</h1>
+        <div class="alert alert-success shadow-lg mb-5 w-full" *ngIf="taskAdded">Task has been added</div>
+        <div class="alert alert-success shadow-lg mb-5 w-full" *ngIf="taskDeleted">Task has been deleted</div>
+        <div class="alert alert-success shadow-lg mb-5 w-full" *ngIf="taskComplete">Task has been completed</div>
+        <div class="input-section">
+            <input 
+                autocomplete="off"
+                type="text" 
+                placeholder="Add a todo" 
+                name="taskName"
+                [(ngModel)]="taskName"
+                required
+                class="input input-bordered input-secondary w-full max-w-xs" />
+        
+            <input 
+                type="date" 
+                name="taskDate"
+                [(ngModel)]="taskDate"
+                required
+                class="input input-bordered input-secondary w-full max-w-xs schedule-date" />
+       
+            <label style="margin-right: 10px;">Priority</label>
+            <select name="priorityLevels" [(ngModel)]="priorityLevels" class="input input-bordered input-secondary w-full max-w-xs select-dropdown" style="margin-right: 10px;">
+                <option value="Select Any" disabled>Select Any</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+                
+            <label style="margin-right: 10px;">Category</label>
+            <select name="categories" [(ngModel)]="categories" class="input input-bordered input-secondary w-full max-w-xs select-dropdown" style="margin-right: 10px;">
+                <option value="Select Any" disabled>Select Any</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+                <option value="Personal">Personal</option>
+                <option value="Education">Education</option>
+                <option value="Finance">Finance</option>
+                <option value="Social">Social</option>
+            </select>              
+            
+            <input type="checkbox" id="toggle" name="isEnabling" [(ngModel)]="isEnabling" (change)="toggleRepeatDropdown($event.target.checked)">
+            <label for="toggle" class="toggle-label" style="margin-right: 15px;">Enable Repeat</label>
+
+            <select *ngIf="repeatEnabled" name="repeatAfter" [(ngModel)]="repeatAfter" class="input input-bordered input-secondary w-full max-w-xs select-dropdown"  style="margin-right: 10px;">
+                <option value="Select Any" disabled>Select Any</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+            </select>
+  
+            <button class="btn btn-secondary add-task-button" (click)="saveTask()">
+                <i class="bx bx-plus bx-sm"></i>
+            </button>
+        </div>
+        
+    </div>       
+    <div class="todos-filter">
+        <div class="dropdown">
+          <label tabindex="0" class="btn m-1">Filter</label>
+          <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li (click)="filterTodos('all')"><a>All</a></li>
+            <li (click)="filterTodos('pending')"><a>Pending</a></li>
+            <li (click)="filterTodos('completed')"><a>Completed</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-secondary delete-all-btn" (click)="deleteAllTasks()">
+          Delete All
+        </button>
+    </div>
+      
+      <h6 style="margin-bottom: 10px; font-size: 30px;">Todays Added Task is here</h6>
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="todos-list-body">
+          <ng-container *ngIf="filteredTaskList && filteredTaskList.length > 0; else noRecords">
+            <tr *ngFor="let task of filteredTaskList">
+              <td>{{ task.taskName }}</td>
+              <td>{{ task.taskDate }}</td>
+              <td>
+                <span *ngIf="!task.isCompleted">Pending</span>
+                <span *ngIf="task.isCompleted">Completed</span>
+              </td>
+              <td>
+                <button class="btn btn-success btn-sm" style="margin-right: 10px;" (click)="editTask(task.uuidId)" [disabled]="task.isCompleted">
+                  <i class="bx bx-check bx-xs"></i>
+                </button>
+                <button class="btn btn-error btn-sm"  (click)="deleteTask(task.uuidId)">
+                  <i class="bx bx-trash bx-xs"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #noRecords>
+            <tr>
+              <td colspan="4" style="text-align: center;">No Records</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table> 
+</div>
+
+<button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" (click)="navigateToTask()">View All Task Here</button>

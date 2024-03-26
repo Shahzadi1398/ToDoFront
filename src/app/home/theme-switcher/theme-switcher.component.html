@@ -1,0 +1,12 @@
+<div class="theme-switcher">
+    <div class="dropdown dropdown-left">
+        <label tabindex="0" class="btn m-1">
+            <i class='bx bxs-palette bx-sm'></i>
+        </label>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li *ngFor="let theme of themes" (click)="setTheme(theme.name)">
+                <a>{{ theme.displayName }}</a>
+            </li>
+        </ul>
+    </div>
+</div>

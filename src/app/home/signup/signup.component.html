@@ -1,0 +1,100 @@
+<div class="container-fluid">
+    <div class="container col-sm-12" *ngIf="loading== false">
+        <h1 class="display-3 text-center">TO DO APP</h1>
+        <p class="lead text-center">TO DO APP for managing your work</p>
+    </div>
+
+    <form #signupFormRef="ngForm" (ngSubmit)="signup(signupFormRef)">
+        <div class="input-section" *ngIf="loading== false">
+            <div class="col-sm-12">              
+                <input
+                    autocomplete="off"
+                    type="text"
+                    placeholder="First Name"
+                    name="firstName"
+                    [(ngModel)]="firstName"
+                    required
+                    #firstNameInput="ngModel"
+                    class="input input-bordered input-secondary w-full max-w-xs"
+                />            
+                <div *ngIf="firstNameInput.errors && (firstNameInput.dirty || firstNameInput.touched)"
+                class="alert alert-danger">
+                   First Name is required (minimum 2 characters)
+                </div>
+            </div>
+            <div class="col-sm-12"> 
+                <input
+                    autocomplete="off"
+                    type="text"
+                    placeholder="Last Name"
+                    name="lastName"
+                    [(ngModel)]="lastName"
+                    required
+                    #lastNameInput="ngModel"
+                    class="input input-bordered input-secondary w-full max-w-xs"
+                />                   
+                <div *ngIf="lastNameInput.errors && (lastNameInput.dirty || lastNameInput.touched)"
+                    class="alert alert-danger">
+                        Last Name is required (minimum 2 characters)
+                </div>
+            </div>
+            <div class="col-sm-12"> 
+                <input
+                    autocomplete="off"
+                    type="text"
+                    placeholder="Email"
+                    name="email"
+                    [(ngModel)]="email"
+                    required
+                    [email]="true"
+                    #emailInput="ngModel"
+                    class="input input-bordered input-secondary w-full max-w-xs"
+                />                   
+                <div *ngIf="emailInput.errors && (emailInput.dirty || emailInput.touched)"
+                class="alert alert-danger">
+                    Valid email is required
+                </div>
+            </div>
+            <div class="col-sm-12"> 
+                <input
+                    autocomplete="off"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    [(ngModel)]="password"
+                    required
+                    #passwordInput="ngModel"
+                    minlength="6"
+                    class="input input-bordered input-secondary w-full max-w-xs"
+                />                   
+                <div *ngIf="passwordInput.errors && (passwordInput.dirty || passwordInput.touched)"
+                    class="alert alert-danger">
+                     Password length must be 6 characters
+                </div>
+            </div>
+            <button #loginButton class="btn btn-secondary login-button"
+            [disabled]="!signupFormRef.valid || isSubmitting"            
+            (click)="signup(signupFormRef)">
+            SignUp
+            </button>
+            <div style="margin-top: 5px;">
+                To login <button class="btn btn-secondary click-here" (click)="showLoadingAndOpenSignup()">Click here</button>
+            </div>      
+    </div>
+    </form>
+
+    <div *ngIf="loading" class="loading-overlay">
+        <div class="center">
+            <div id="wave1"  class="wave"></div>
+            <div id="wave2"  class="wave"></div>
+            <div id="wave3"  class="wave"></div>
+            <div id="wave4" class="wave"></div>
+            <div id="wave5"  class="wave"></div>
+            <div id="wave6"  class="wave"></div>
+            <div id="wave7"  class="wave"></div>
+            <div id="wave8"  class="wave"></div>
+            <div id="wave9" class="wave"></div>
+            <div id="wave0"  class="wave"></div>
+          </div>
+    </div>
+</div>
